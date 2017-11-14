@@ -4,7 +4,76 @@
 #											                                          #
 #	Fábio Chagas da Silva NUSP:589704						                  #
 #											                                          #
-#	EP 3:                                               				  #
+#	EP 3:    Classifição de arquivos	                            #
 #											                                          #
 #################################################################
+
+class PilhaLista:
+	'''Pilha como uma lista.'''
+	# Construtor da classe Produto
+	def __init__(self):
+		self._pilha = [] 
+		# lista interna
+	# retorna o tamanho da pilha
+	def __len__(self):
+		return len(self._pilha)
+	# retorna True se pilha vazia
+	def is_empty(self):
+		return len(self._pilha) == 0
+	# empilha novo elemento e 
+	def push(self, e):
+		self._pilha.append(e)
+	# retorna o elemento do topo da pilha sem retirá-lo
+	# excessão se pilha vazia
+	def top(self):
+		if self.is_empty( ):
+			raise Empty("Pilha vazia")
+		return self._pilha[-1]
+	def pop(self):
+		if self.is_empty( ):
+			raise Empty("Pilha vazia")
+		return self._pilha.pop( )
+
+
+
+def particiona(lista, inicio, fim):
+	i, j = inicio, fim
+	pivo = lista[fim]
+	while True:
+		# aumentado i
+		while i < j and lista[i] <= pivo: i = i + 1
+		if i < j:
+			lista[i], lista[j] = pivo, lista[i]
+		else: break
+		# diminuindo j
+		while i < j and lista[j] >= pivo: j = j - 1
+		if i < j: lista[i], lista[j] = lista[j], pivo
+		else: break
+		return i
+
+
+def Quick_Sort(lista):
+	# Cria a pilha de sub-listas e inicia com lista completa
+	Pilha = PilhaLista()
+	Pilha.push((0, len(lista) - 1))
+	# Repete até que a pilha de sub-listas esteja vazia
+	while not Pilha.is_empty():
+		inicio, fim = Pilha.pop()
+		# Só particiona se há mais de 1 elemento
+		if fim - inicio > 0:
+			k = particiona(lista, inicio, fim)
+			# Empilhe as sub-listas resultantes
+			Pilha.push((inicio, k - 1))
+			Pilha.push((k + 1, fim))
+
+
+def Quick_Sort_rec(lista, inicio, fim):
+    # Se a lista tem mais de um elemento, ela será
+    # particionada e as duas partições serão classificadas
+    # pelo mesmo método Quick Sort
+    if inicio < fim:
+        k = particiona(lista, inicio, fim)
+        print("pivo:", lista[k])
+        Quick_Sort(lista, inicio, k - 1)
+        Quick_Sort(lista, k + 1, fim)
 
